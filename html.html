@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mozgat</title>
+</head>
+<style>
+    body { background-color: tan;}
+    #jatek {
+        font-size: 0px;
+        border: 1px solid black;
+        width: 576px; height: 576px;
+        padding: 10px;
+        margin: auto;
+        background-color: white;
+    }
+    #jatek img:hover {
+        background-color: palegreen;
+    }
+    #hud {
+        width: 576px; height: 576px;
+        padding: 10px;
+        margin: auto;
+        text-align: center;
+        font-size: xx-large;
+        font-weight: bold;
+    }
+
+    span:hover {
+        background-color: lightblue;
+    }
+</style>
+<script>
+    let kepek = ["moveR", "moveL", "moveU", "moveD"];
+    let pont;
+    let palya;
+    let nyer;
+    function start() {
+        let html = "";
+        nyer = 36;
+        palya = [];
+        pont = 0;
+        for (let y = 0; y < 6; y++) {
+            palya[y] = [];
+            for (let x = 0; x < 6; x++) {
+                let rand = Math.floor(Math.random()*4)
+                palya[y][x] = kepek[rand];
+            }
+        }
+        kiir();
+    }
+
+    function katt(x, y) {
+        if (palya[y][x] == "moveR") {
+            let temp = "moveR";
+            if (x == 5) {
+                palya[y][x] = "moveX";
+                pont++;
+                nyer--;
+            } else {
+                if (palya[y][x+1] != "moveX") pont--;
+                palya[y][x] = palya[y][x+1];
+                palya[y][x+1] = temp;
+            } 
+        } else if (palya[y][x] == "moveL") {
+            let temp = "moveL";
+            if (x == 0) {
+                palya[y][x] = "moveX";
+                pont++;
+                nyer--;
+            } else {
+                if (palya[y][x-1] != "moveX") pont--;
+                palya[y][x] = palya[y][x-1];
+                palya[y][x-1] = temp;
+            } 
+        } else if (palya[y][x] == "moveU") {
+            let temp = "moveU";
+            if (y == 0) {
+                palya[y][x] = "moveX";
+                pont++;
+                nyer--;
+            } else {
+                if (palya[y-1][x] != "moveX") pont--;
+                palya[y][x] = palya[y-1][x];
+                palya[y-1][x] = temp;
+            } 
+        } else if (palya[y][x] == "moveD") {
+            let temp = "moveD";
+            if (y == 5) {
+                palya[y][x] = "moveX";
+                pont++;
+                nyer--;
+            } else {
+                if (palya[y+1][x] != "moveX") pont--;
+                palya[y][x] = palya[y+1][x];
+                palya[y+1][x] = temp;
+            } 
+        }
+        kiir();
+    }
+
+    function kiir() {
+        html = "";
+        for (let y = 0; y < 6; y++) {
+            for (let x = 0; x < 6; x++) {
+                html += "<img src='" + palya[y][x] +".png' onclick='katt(" + x + ", " + y +")' id='y" + y + "x" + x + "'>";
+            }
+        }
+        console.log(palya);
+        document.getElementById("jatek").innerHTML = html;
+        document.getElementById("hud").innerHTML = pont + " pont";
+        win();
+    }
+    function win() {
+        if (nyer == 0) {
+            document.getElementById("hud").innerHTML = "<span onclick='start();'>Nyertél</span>"
+        }
+    }
+</script>
+<body onload="start();">
+    <div id="jatek"></div>
+    <div id="hud"></div>
+</body>
+</html>
